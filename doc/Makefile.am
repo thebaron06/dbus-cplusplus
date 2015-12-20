@@ -4,7 +4,16 @@ if DBUS_DOXYGEN_DOCS_ENABLED
 
 PACKAGE_DOCNAME = $(PACKAGE_TARNAME)-$(PACKAGE_VERSION)-doc
 
-EXTRA_DIST = Doxyfile.in $(wildcard img/*.*) head.html foot.html dbus-c++.css mainpage
+EXTRA_DIST = Doxyfile.in head.html foot.html dbus-c++.css mainpage \
+ dbus-c++-doxy.css \
+ foot_bg.png \
+ head_bg.png \
+ header_menu_background_last.png \
+ header_menu_background.png \
+ header_menu_current_background.png \
+ header_menu_unselected_background.png \
+ logo.png
+
 
 doc-clean:
 	rm -rf html/ $(top_builddir)/$(PACKAGE_DOCNAME).tar*

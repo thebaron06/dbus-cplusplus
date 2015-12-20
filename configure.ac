@@ -1,11 +1,11 @@
 # Autojunk script for libdbus-c++
 
 AC_PREREQ(2.59)
-AC_INIT([libdbus-c++], 0.9.0, [andreas.volz@tux-style.com])
-
-AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
+AC_INIT([libdbus-c++], 0.9.0)
+AC_CONFIG_SRCDIR([src/error.cpp])
 AM_CONFIG_HEADER([config.h])
 AC_CONFIG_MACRO_DIR([m4])
+AM_INIT_AUTOMAKE([subdir-objects])
 
 AC_CANONICAL_HOST
 
