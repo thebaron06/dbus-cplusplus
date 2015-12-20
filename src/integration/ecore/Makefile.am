@@ -1,3 +1,5 @@
+HEADER_DIR = $(top_srcdir)/include/dbus-c++
+
 if ENABLE_ECORE
 
 lib_LTLIBRARIES = \
@@ -18,7 +20,6 @@ AM_CPPFLAGS = \
 	$(dbus_CFLAGS) \
 	$(ecore_CFLAGS)
 
-HEADER_DIR = $(top_srcdir)/include/dbus-c++
 libdbus_c___ecore_1_HEADERS = \
 	$(HEADER_DIR)/ecore-integration.h
 

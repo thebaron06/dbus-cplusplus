@@ -1,3 +1,5 @@
+HEADER_DIR = $(top_srcdir)/include/dbus-c++
+
 if ENABLE_GLIB
 
 lib_LTLIBRARIES = \
@@ -18,7 +20,6 @@ AM_CPPFLAGS = \
 	$(dbus_CFLAGS) \
 	$(glib_CFLAGS)
 
-HEADER_DIR = $(top_srcdir)/include/dbus-c++
 libdbus_c___glib_1_HEADERS = \
 	$(HEADER_DIR)/glib-integration.h
 
