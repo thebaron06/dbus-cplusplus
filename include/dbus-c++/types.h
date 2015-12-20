@@ -89,13 +89,7 @@ public:
   }
 
   template <typename T>
-  operator T() const
-  {
-    T cast;
-    MessageIter ri = _msg.reader();
-    ri >> cast;
-    return cast;
-  }
+  operator T() const;
 
 private:
 
@@ -316,7 +310,7 @@ struct type< Struct<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
   }
 };
 
-} /* namespace DBus */
+extern DXXAPI DBus::MessageIter &operator << (DBus::MessageIter &iter, const DBus::Variant &val);
 
 inline DBus::MessageIter &operator << (DBus::MessageIter &iter, const DBus::Invalid &)
 {
@@ -551,6 +545,8 @@ inline DBus::MessageIter &operator >> (DBus::MessageIter &iter, DBus::Signature 
   return ++iter;
 }
 
+extern DXXAPI DBus::MessageIter &operator >> (DBus::MessageIter &iter, DBus::Variant &val);
+
 template<typename E>
 inline DBus::MessageIter &operator >> (DBus::MessageIter &iter, std::vector<E>& val)
 {
@@ -644,7 +640,16 @@ inline DBus::MessageIter &operator >> (DBus::MessageIter &iter, DBus::Struct<T1,
   return ++iter;
 }
 
-extern DXXAPI DBus::MessageIter &operator >> (DBus::MessageIter &iter, DBus::Variant &val);
+template <typename T>
+inline DBus::Variant::operator T() const
+{
+  T cast;
+  DBus::MessageIter ri = _msg.reader();
+  ri >> cast;
+  return cast;
+}
+
+} /* namespace DBus */
 
 #endif//__DBUSXX_TYPES_H
 
