@@ -346,13 +346,17 @@ void MessageIter::copy_data(MessageIter &to)
       debug_log("copying compound type: %c[%s]", from.type(), sig);
 
       MessageIter to_container(to.msg());
-      dbus_message_iter_open_container
+      dbus_bool_t ret = dbus_message_iter_open_container
       (
         (DBusMessageIter *) & (to._iter),
         from.type(),
-        from.type() == DBUS_TYPE_VARIANT ? NULL : sig,
+        (from.type() == DBUS_TYPE_VARIANT || from.type() == DBUS_TYPE_ARRAY) ? sig : NULL,
         (DBusMessageIter *) & (to_container._iter)
       );
+      if (!ret)
+      {
+        throw ErrorNoMemory("Unable to append container");
+      }
 
       from_container.copy_data(to_container);
       to.close_container(to_container);
