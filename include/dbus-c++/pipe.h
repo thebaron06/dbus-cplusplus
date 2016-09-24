@@ -30,6 +30,8 @@
 /* STD */
 #include <cstdlib>
 
+#include <sys/types.h>
+
 namespace DBus
 {
 
