@@ -64,7 +64,7 @@ class DXXAPI BusDispatcher : public Dispatcher, public DefaultMainLoop
 public:
   BusDispatcher();
 
-  ~BusDispatcher() {}
+  ~BusDispatcher();
 
   virtual void enter();
 

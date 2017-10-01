@@ -89,6 +89,11 @@ BusDispatcher::BusDispatcher() :
   _fdunlock[1] = _pipe[1];
 }
 
+BusDispatcher::~BusDispatcher() {
+  ::close(_fdunlock[0]);
+  ::close(_fdunlock[1]);
+}
+
 void BusDispatcher::enter()
 {
   debug_log("entering dispatcher %p", this);
@@ -124,9 +129,6 @@ void BusDispatcher::leave()
 
   int ret = write(_fdunlock[1], "exit", strlen("exit"));
   if (ret == -1) throw Error("WriteError:errno", toString(errno).c_str());
-
-  close(_fdunlock[1]);
-  close(_fdunlock[0]);
 }
 
 Pipe *BusDispatcher::add_pipe(void(*handler)(const void *data, void *buffer, unsigned int nbyte), const void *data)
