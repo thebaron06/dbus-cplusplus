@@ -197,6 +197,19 @@ private:
   pthread_mutex_t _mutex;
 };
 
+template <typename T>
+class DXXAPI LockGuard {
+ public:
+    explicit LockGuard(T &mtx) : mtx_(&mtx) {
+        mtx_->lock();
+    }
+    ~LockGuard() {
+        mtx_->unlock();
+    }
+ private:
+    T *mtx_;
+};
+
 class DXXAPI DefaultMainLoop
 {
 public:
