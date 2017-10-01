@@ -21,7 +21,6 @@
  *
  */
 
-
 #ifndef __DBUSXX_DISPATCHER_H
 #define __DBUSXX_DISPATCHER_H
 
@@ -29,201 +28,201 @@
 #include "connection.h"
 #include "eventloop.h"
 
-namespace DBus
-{
+namespace DBus {
 
-class DXXAPI Timeout
-{
-public:
+class DXXAPI Timeout {
+ public:
 
-  class Internal;
+    class Internal;
 
-  Timeout(Internal *i);
+    Timeout(Internal *i);
 
-  virtual ~Timeout() {}
+    virtual ~Timeout() {
+    }
 
-  /*!
-   * \brief Gets the timeout interval.
-   *
-   * The handle() should be called each time this interval elapses,
-   * starting after it elapses once.
-   *
-   * The interval may change during the life of the timeout; if so, the timeout
-   * will be disabled and re-enabled (calling the "timeout toggled function") to
-   * notify you of the change.
-   *
-   * return The interval in miliseconds.
-   */
-  int interval() const;
+    /*!
+     * \brief Gets the timeout interval.
+     *
+     * The handle() should be called each time this interval elapses,
+     * starting after it elapses once.
+     *
+     * The interval may change during the life of the timeout; if so, the timeout
+     * will be disabled and re-enabled (calling the "timeout toggled function") to
+     * notify you of the change.
+     *
+     * return The interval in miliseconds.
+     */
+    int interval() const;
 
-  bool enabled() const;
+    bool enabled() const;
 
-  /*!
-   * \brief Calls the timeout handler for this timeout.
-   *
-   * This function should be called when the timeout occurs.
-   *
-   * If this function returns FALSE, then there wasn't enough memory to handle
-   * the timeout. Typically just letting the timeout fire again next time it
-   * naturally times out is an adequate response to that problem, but you could
-   * try to do more if you wanted.
-   *
-   * return false If there wasn't enough memory.
-   */
-  bool handle();
+    /*!
+     * \brief Calls the timeout handler for this timeout.
+     *
+     * This function should be called when the timeout occurs.
+     *
+     * If this function returns FALSE, then there wasn't enough memory to handle
+     * the timeout. Typically just letting the timeout fire again next time it
+     * naturally times out is an adequate response to that problem, but you could
+     * try to do more if you wanted.
+     *
+     * return false If there wasn't enough memory.
+     */
+    bool handle();
 
-  virtual void toggle() = 0;
+    virtual void toggle() = 0;
 
-private:
+ private:
 
-  DXXAPILOCAL Timeout(const Timeout &);
+    DXXAPILOCAL
+    Timeout(const Timeout &);
 
-private:
+ private:
 
-  Internal *_int;
+    Internal *_int;
 };
 
-class DXXAPI Watch
-{
-public:
+class DXXAPI Watch {
+ public:
 
-  class Internal;
+    class Internal;
 
-  Watch(Internal *i);
+    Watch(Internal *i);
 
-  virtual ~Watch() {}
+    virtual ~Watch() {
+    }
 
-  /*!
-   * \brief A main loop could poll this descriptor to integrate dbus-c++.
-   *
-   * This function calls dbus_watch_get_socket() on win32 and
-   * dbus_watch_get_unix_fd() on all other systems. (see dbus documentation)
-   *
-   * @return The file descriptor.
-   */
-  int descriptor() const;
+    /*!
+     * \brief A main loop could poll this descriptor to integrate dbus-c++.
+     *
+     * This function calls dbus_watch_get_socket() on win32 and
+     * dbus_watch_get_unix_fd() on all other systems. (see dbus documentation)
+     *
+     * @return The file descriptor.
+     */
+    int descriptor() const;
 
-  /*!
-   * \brief Gets flags from DBusWatchFlags indicating what conditions should be
-   *        monitored on the file descriptor.
-   *
-   * The flags returned will only contain DBUS_WATCH_READABLE and DBUS_WATCH_WRITABLE,
-   * never DBUS_WATCH_HANGUP or DBUS_WATCH_ERROR; all watches implicitly include
-   * a watch for hangups, errors, and other exceptional conditions.
-   *
-   * @return The conditions to watch.
-   */
-  int flags() const;
+    /*!
+     * \brief Gets flags from DBusWatchFlags indicating what conditions should be
+     *        monitored on the file descriptor.
+     *
+     * The flags returned will only contain DBUS_WATCH_READABLE and DBUS_WATCH_WRITABLE,
+     * never DBUS_WATCH_HANGUP or DBUS_WATCH_ERROR; all watches implicitly include
+     * a watch for hangups, errors, and other exceptional conditions.
+     *
+     * @return The conditions to watch.
+     */
+    int flags() const;
 
-  bool enabled() const;
+    bool enabled() const;
 
-  /*!
-   * \brief Called to notify the D-Bus library when a previously-added watch
-   *        is ready for reading or writing, or has an exception such as a hangup.
-   *
-   * If this function returns FALSE, then the file descriptor may still be
-   * ready for reading or writing, but more memory is needed in order to do the
-   * reading or writing. If you ignore the FALSE return, your application may
-   * spin in a busy loop on the file descriptor until memory becomes available,
-   * but nothing more catastrophic should happen.
-   *
-   * dbus_watch_handle() cannot be called during the DBusAddWatchFunction, as the
-   * connection will not be ready to handle that watch yet.
-   *
-   * It is not allowed to reference a DBusWatch after it has been passed to remove_function.
-   *
-   * @param flags The poll condition using DBusWatchFlags values.
-   * @return false If there wasn't enough memory.
-   */
-  bool handle(int flags);
+    /*!
+     * \brief Called to notify the D-Bus library when a previously-added watch
+     *        is ready for reading or writing, or has an exception such as a hangup.
+     *
+     * If this function returns FALSE, then the file descriptor may still be
+     * ready for reading or writing, but more memory is needed in order to do the
+     * reading or writing. If you ignore the FALSE return, your application may
+     * spin in a busy loop on the file descriptor until memory becomes available,
+     * but nothing more catastrophic should happen.
+     *
+     * dbus_watch_handle() cannot be called during the DBusAddWatchFunction, as the
+     * connection will not be ready to handle that watch yet.
+     *
+     * It is not allowed to reference a DBusWatch after it has been passed to remove_function.
+     *
+     * @param flags The poll condition using DBusWatchFlags values.
+     * @return false If there wasn't enough memory.
+     */
+    bool handle(int flags);
 
-  virtual void toggle() = 0;
+    virtual void toggle() = 0;
 
-private:
+ private:
 
-  DXXAPILOCAL Watch(const Watch &);
+    DXXAPILOCAL
+    Watch(const Watch &);
 
-private:
+ private:
 
-  Internal *_int;
+    Internal *_int;
 };
 
-class DXXAPI Dispatcher
-{
-public:
+class DXXAPI Dispatcher {
+ public:
 
-  virtual ~Dispatcher()
-  {}
+    virtual ~Dispatcher() {
+    }
 
-  void queue_connection(Connection::Private *);
+    void queue_connection(Connection::Private *);
 
-  void dispatch_pending();
-  bool has_something_to_dispatch();
+    void dispatch_pending();
+    bool has_something_to_dispatch();
 
-  virtual void enter() = 0;
+    virtual void enter() = 0;
 
-  virtual void leave() = 0;
+    virtual void leave() = 0;
 
-  virtual Timeout *add_timeout(Timeout::Internal *) = 0;
+    virtual Timeout *add_timeout(Timeout::Internal *) = 0;
 
-  virtual void rem_timeout(Timeout *) = 0;
+    virtual void rem_timeout(Timeout *) = 0;
 
-  virtual Watch *add_watch(Watch::Internal *) = 0;
+    virtual Watch *add_watch(Watch::Internal *) = 0;
 
-  virtual void rem_watch(Watch *) = 0;
+    virtual void rem_watch(Watch *) = 0;
 
-  struct Private;
+    struct Private;
 
-private:
-  void dispatch_pending(Connection::PrivatePList &pending_queue);
+ private:
+    void dispatch_pending(Connection::PrivatePList &pending_queue);
 
-  DefaultMutex _mutex_p;
-  DefaultMutex _mutex_p_copy;
+    DefaultMutex _mutex_p;
+    DefaultMutex _mutex_p_copy;
 
-  Connection::PrivatePList _pending_queue;
+    Connection::PrivatePList _pending_queue;
 };
 
 extern DXXAPI Dispatcher *default_dispatcher;
 
 /* classes for multithreading support
-*/
+ */
 
-class DXXAPI Mutex
-{
-public:
+class DXXAPI Mutex {
+ public:
 
-  virtual ~Mutex() {}
+    virtual ~Mutex() {
+    }
 
-  virtual void lock() = 0;
+    virtual void lock() = 0;
 
-  virtual void unlock() = 0;
+    virtual void unlock() = 0;
 
-  struct Internal;
+    struct Internal;
 
-protected:
+ protected:
 
-  Internal *_int;
+    Internal *_int;
 };
 
-class DXXAPI CondVar
-{
-public:
+class DXXAPI CondVar {
+ public:
 
-  virtual ~CondVar() {}
+    virtual ~CondVar() {
+    }
 
-  virtual void wait(Mutex *) = 0;
+    virtual void wait(Mutex *) = 0;
 
-  virtual bool wait_timeout(Mutex *, int timeout) = 0;
+    virtual bool wait_timeout(Mutex *, int timeout) = 0;
 
-  virtual void wake_one() = 0;
+    virtual void wake_one() = 0;
 
-  virtual void wake_all() = 0;
+    virtual void wake_all() = 0;
 
-  struct Internal;
+    struct Internal;
 
-protected:
+ protected:
 
-  Internal *_int;
+    Internal *_int;
 };
 
 typedef Mutex *(*MutexNewFn)();
@@ -246,85 +245,69 @@ typedef void (*CondVarWakeAllFn)(CondVar *cv);
 
 void DXXAPI _init_threading();
 
-void DXXAPI _init_threading(
-  MutexNewFn, MutexFreeFn, MutexLockFn, MutexUnlockFn,
-  CondVarNewFn, CondVarFreeFn, CondVarWaitFn, CondVarWaitTimeoutFn, CondVarWakeOneFn, CondVarWakeAllFn
-);
+void DXXAPI _init_threading(MutexNewFn, MutexFreeFn, MutexLockFn, MutexUnlockFn, CondVarNewFn, CondVarFreeFn,
+                            CondVarWaitFn, CondVarWaitTimeoutFn, CondVarWakeOneFn, CondVarWakeAllFn);
 
 template<class Mx, class Cv>
-struct Threading
-{
-  static void init()
-  {
-    _init_threading(
-      mutex_new, mutex_free, mutex_lock, mutex_unlock,
-      condvar_new, condvar_free, condvar_wait, condvar_wait_timeout, condvar_wake_one, condvar_wake_all
-    );
-  }
+struct Threading {
+    static void init() {
+        _init_threading(mutex_new, mutex_free, mutex_lock, mutex_unlock, condvar_new, condvar_free, condvar_wait,
+                        condvar_wait_timeout, condvar_wake_one, condvar_wake_all);
+    }
 
-  static Mutex *mutex_new()
-  {
-    return new Mx;
-  }
+    static Mutex *mutex_new() {
+        return new Mx;
+    }
 
 #ifndef DBUS_HAS_RECURSIVE_MUTEX
-  static bool mutex_free(Mutex *mx)
-  {
-    delete mx;
-    return true;
-  }
+    static bool mutex_free(Mutex *mx) {
+        delete mx;
+        return true;
+    }
 
-  static bool mutex_lock(Mutex *mx)
-  {
-    mx->lock();
-    return true;
-  }
+    static bool mutex_lock(Mutex *mx) {
+        mx->lock();
+        return true;
+    }
 #else
-  static void mutex_free(Mutex *mx)
-  {
-    delete mx;
-  }
+    static void mutex_free(Mutex *mx)
+    {
+        delete mx;
+    }
 
-  static void mutex_lock(Mutex *mx)
-  {
-    mx->lock();
-  }
+    static void mutex_lock(Mutex *mx)
+    {
+        mx->lock();
+    }
 #endif
 
-  static void mutex_unlock(Mutex *mx)
-  {
-    mx->unlock();
-  }
+    static void mutex_unlock(Mutex *mx) {
+        mx->unlock();
+    }
 
-  static CondVar *condvar_new()
-  {
-    return new Cv;
-  }
+    static CondVar *condvar_new() {
+        return new Cv;
+    }
 
-  static void condvar_free(CondVar *cv)
-  {
-    delete cv;
-  }
+    static void condvar_free(CondVar *cv) {
+        delete cv;
+    }
 
-  static void condvar_wait(CondVar *cv, Mutex *mx)
-  {
-    cv->wait(mx);
-  }
+    static void condvar_wait(CondVar *cv, Mutex *mx) {
+        cv->wait(mx);
+    }
 
-  static bool condvar_wait_timeout(CondVar *cv, Mutex *mx, int timeout)
-  {
-    return cv->wait_timeout(mx, timeout);
-  }
+    static bool condvar_wait_timeout(CondVar *cv, Mutex *mx, int timeout) {
+        return cv->wait_timeout(mx, timeout);
+    }
 
-  static void condvar_wake_one(CondVar *cv)
-  {
-    cv->wake_one();
-  }
+    static void condvar_wake_one(CondVar *cv) {
+        cv->wake_one();
+    }
 
-  static void condvar_wake_all(CondVar *cv)
-  {
-    cv->wake_all();
-  }
+    static void condvar_wake_all(CondVar *cv) {
+        cv->wake_all();
+    }
 };
 
 } /* namespace DBus */

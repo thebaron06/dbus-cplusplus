@@ -21,7 +21,6 @@
  *
  */
 
-
 #ifndef __DBUSXX_GLIB_INTEGRATION_H
 #define __DBUSXX_GLIB_INTEGRATION_H
 
@@ -30,92 +29,89 @@
 #include "api.h"
 #include "dispatcher.h"
 
-namespace DBus
-{
+namespace DBus {
 
-namespace Glib
-{
+namespace Glib {
 
 class BusDispatcher;
 
-class DXXAPI BusTimeout : public Timeout
-{
-private:
+class DXXAPI BusTimeout : public Timeout {
+ private:
 
-  BusTimeout(Timeout::Internal *, GMainContext *, int);
+    BusTimeout(Timeout::Internal *, GMainContext *, int);
 
-  ~BusTimeout();
+    ~BusTimeout();
 
-  void toggle();
+    void toggle();
 
-  static gboolean timeout_handler(gpointer);
+    static gboolean timeout_handler(gpointer);
 
-  void _enable();
+    void _enable();
 
-  void _disable();
+    void _disable();
 
-private:
+ private:
 
-  GMainContext *_ctx;
-  int _priority;
-  GSource *_source;
+    GMainContext *_ctx;
+    int _priority;
+    GSource *_source;
 
-  friend class BusDispatcher;
+    friend class BusDispatcher;
 };
 
-class DXXAPI BusWatch : public Watch
-{
-private:
+class DXXAPI BusWatch : public Watch {
+ private:
 
-  BusWatch(Watch::Internal *, GMainContext *, int);
+    BusWatch(Watch::Internal *, GMainContext *, int);
 
-  ~BusWatch();
+    ~BusWatch();
 
-  void toggle();
+    void toggle();
 
-  static gboolean watch_handler(gpointer);
+    static gboolean watch_handler(gpointer);
 
-  void _enable();
+    void _enable();
 
-  void _disable();
+    void _disable();
 
-private:
+ private:
 
-  GMainContext *_ctx;
-  int _priority;
-  GSource *_source;
+    GMainContext *_ctx;
+    int _priority;
+    GSource *_source;
 
-  friend class BusDispatcher;
+    friend class BusDispatcher;
 };
 
-class DXXAPI BusDispatcher : public Dispatcher
-{
-public:
+class DXXAPI BusDispatcher : public Dispatcher {
+ public:
 
-  BusDispatcher();
-  ~BusDispatcher();
+    BusDispatcher();
+    ~BusDispatcher();
 
-  void attach(GMainContext *);
+    void attach(GMainContext *);
 
-  void enter() {}
+    void enter() {
+    }
 
-  void leave() {}
+    void leave() {
+    }
 
-  Timeout *add_timeout(Timeout::Internal *);
+    Timeout *add_timeout(Timeout::Internal *);
 
-  void rem_timeout(Timeout *);
+    void rem_timeout(Timeout *);
 
-  Watch *add_watch(Watch::Internal *);
+    Watch *add_watch(Watch::Internal *);
 
-  void rem_watch(Watch *);
+    void rem_watch(Watch *);
 
-  void set_priority(int priority);
+    void set_priority(int priority);
 
-private:
+ private:
 
-  GMainContext *_ctx;
-  int _priority;
-  GSource *_source;
+    GMainContext *_ctx;
+    int _priority;
+    GSource *_source;
 };
 
 } /* namespace Glib */

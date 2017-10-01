@@ -21,7 +21,6 @@
  *
  */
 
-
 #ifndef __DBUSXX_EVENTLOOP_INTEGRATION_H
 #define __DBUSXX_EVENTLOOP_INTEGRATION_H
 
@@ -31,8 +30,7 @@
 #include "util.h"
 #include "eventloop.h"
 
-namespace DBus
-{
+namespace DBus {
 
 /*
  * Glue between the event loop and the DBus library
@@ -41,57 +39,54 @@ namespace DBus
 class BusDispatcher;
 class Pipe;
 
-class DXXAPI BusTimeout : public Timeout, public DefaultTimeout
-{
-  BusTimeout(Timeout::Internal *, BusDispatcher *);
+class DXXAPI BusTimeout : public Timeout, public DefaultTimeout {
+    BusTimeout(Timeout::Internal *, BusDispatcher *);
 
-  void toggle();
+    void toggle();
 
-  friend class BusDispatcher;
+    friend class BusDispatcher;
 };
 
-class DXXAPI BusWatch : public Watch, public DefaultWatch
-{
-  BusWatch(Watch::Internal *, BusDispatcher *);
+class DXXAPI BusWatch : public Watch, public DefaultWatch {
+    BusWatch(Watch::Internal *, BusDispatcher *);
 
-  void toggle();
+    void toggle();
 
-  friend class BusDispatcher;
+    friend class BusDispatcher;
 };
 
-class DXXAPI BusDispatcher : public Dispatcher, public DefaultMainLoop
-{
-public:
-  BusDispatcher();
+class DXXAPI BusDispatcher : public Dispatcher, public DefaultMainLoop {
+ public:
+    BusDispatcher();
 
-  ~BusDispatcher();
+    ~BusDispatcher();
 
-  virtual void enter();
+    virtual void enter();
 
-  virtual void leave();
+    virtual void leave();
 
-  virtual Pipe *add_pipe(void(*handler)(const void *data, void *buffer, unsigned int nbyte), const void *data);
+    virtual Pipe *add_pipe(void (*handler)(const void *data, void *buffer, unsigned int nbyte), const void *data);
 
-  virtual void del_pipe(Pipe *pipe);
+    virtual void del_pipe(Pipe *pipe);
 
-  virtual void do_iteration();
+    virtual void do_iteration();
 
-  virtual Timeout *add_timeout(Timeout::Internal *);
+    virtual Timeout *add_timeout(Timeout::Internal *);
 
-  virtual void rem_timeout(Timeout *);
+    virtual void rem_timeout(Timeout *);
 
-  virtual Watch *add_watch(Watch::Internal *);
+    virtual Watch *add_watch(Watch::Internal *);
 
-  virtual void rem_watch(Watch *);
+    virtual void rem_watch(Watch *);
 
-  void watch_ready(DefaultWatch &);
+    void watch_ready(DefaultWatch &);
 
-  void timeout_expired(DefaultTimeout &);
+    void timeout_expired(DefaultTimeout &);
 
-private:
-  bool _running;
-  int _pipe[2];
-  std::list <Pipe *> pipe_list;
+ private:
+    bool _running;
+    int _pipe[2];
+    std::list<Pipe *> pipe_list;
 };
 
 } /* namespace DBus */

@@ -21,7 +21,6 @@
  *
  */
 
-
 #ifndef __DBUSXX_API_H
 #define __DBUSXX_API_H
 

@@ -21,7 +21,6 @@
  *
  */
 
-
 #ifndef __DBUSXX_ECORE_INTEGRATION_H
 #define __DBUSXX_ECORE_INTEGRATION_H
 
@@ -31,84 +30,81 @@
 #include "dispatcher.h"
 #include "Ecore.h"
 
-namespace DBus
-{
+namespace DBus {
 
-namespace Ecore
-{
+namespace Ecore {
 
 class BusDispatcher;
 
-class DXXAPI BusTimeout : public Timeout
-{
-private:
+class DXXAPI BusTimeout : public Timeout {
+ private:
 
-  BusTimeout(Timeout::Internal *);
+    BusTimeout(Timeout::Internal *);
 
-  ~BusTimeout();
+    ~BusTimeout();
 
-  void toggle();
+    void toggle();
 
-  static Eina_Bool timeout_handler(void *);
+    static Eina_Bool timeout_handler(void *);
 
-  void _enable();
+    void _enable();
 
-  void _disable();
+    void _disable();
 
-private:
-  Ecore_Timer *_etimer;
+ private:
+    Ecore_Timer *_etimer;
 
-  friend class BusDispatcher;
+    friend class BusDispatcher;
 };
 
-class DXXAPI BusWatch : public Watch
-{
-private:
+class DXXAPI BusWatch : public Watch {
+ private:
 
-  BusWatch(Watch::Internal *);
+    BusWatch(Watch::Internal *);
 
-  ~BusWatch();
+    ~BusWatch();
 
-  void toggle();
+    void toggle();
 
-  static Eina_Bool watch_check(void *data, Ecore_Fd_Handler *fdh);
-  static Eina_Bool watch_prepare(void *data, Ecore_Fd_Handler *fdh);
-  static Eina_Bool watch_dispatch(void *data, Ecore_Fd_Handler *fdh);
+    static Eina_Bool watch_check(void *data, Ecore_Fd_Handler *fdh);
+    static Eina_Bool watch_prepare(void *data, Ecore_Fd_Handler *fdh);
+    static Eina_Bool watch_dispatch(void *data, Ecore_Fd_Handler *fdh);
 
-  void _enable();
+    void _enable();
 
-  void _disable();
+    void _disable();
 
-  void data(Ecore::BusDispatcher *bd);
+    void data(Ecore::BusDispatcher *bd);
 
-private:
-  Ecore_Fd_Handler *fd_handler;
-  Ecore::BusDispatcher *_bd;
+ private:
+    Ecore_Fd_Handler *fd_handler;
+    Ecore::BusDispatcher *_bd;
 
-  friend class BusDispatcher;
+    friend class BusDispatcher;
 };
 
-class DXXAPI BusDispatcher : public Dispatcher
-{
-public:
-  BusDispatcher();
+class DXXAPI BusDispatcher : public Dispatcher {
+ public:
+    BusDispatcher();
 
-  void enter() {}
+    void enter() {
+    }
 
-  void leave() {}
+    void leave() {
+    }
 
-  Timeout *add_timeout(Timeout::Internal *);
+    Timeout *add_timeout(Timeout::Internal *);
 
-  void rem_timeout(Timeout *);
+    void rem_timeout(Timeout *);
 
-  Watch *add_watch(Watch::Internal *);
+    Watch *add_watch(Watch::Internal *);
 
-  void rem_watch(Watch *);
+    void rem_watch(Watch *);
 
-  static Eina_Bool dispatch(void *data, Ecore_Fd_Handler *fdh);
-  static Eina_Bool check(void *data, Ecore_Fd_Handler *fdh);
+    static Eina_Bool dispatch(void *data, Ecore_Fd_Handler *fdh);
+    static Eina_Bool check(void *data, Ecore_Fd_Handler *fdh);
 
-private:
+ private:
 };
 
 } /* namespace Ecore */

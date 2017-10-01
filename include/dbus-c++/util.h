@@ -21,7 +21,6 @@
  *
  */
 
-
 #ifndef __DBUSXX_UTIL_H
 #define __DBUSXX_UTIL_H
 
@@ -33,269 +32,244 @@
 #include "api.h"
 #include "debug.h"
 
-namespace DBus
-{
+namespace DBus {
 
 /*
  *   Very simple reference counting
  */
 
-class DXXAPI RefCnt
-{
-public:
+class DXXAPI RefCnt {
+ public:
 
-  RefCnt()
-  {
-    __ref = new int;
-    (*__ref) = 1;
-  }
-
-  RefCnt(const RefCnt &rc)
-  {
-    __ref = rc.__ref;
-    ref();
-  }
-
-  virtual ~RefCnt()
-  {
-    unref();
-  }
-
-  RefCnt &operator = (const RefCnt &ref)
-  {
-    ref.ref();
-    unref();
-    __ref = ref.__ref;
-    return *this;
-  }
-
-  bool noref() const
-  {
-    return (*__ref) == 0;
-  }
-
-  bool one() const
-  {
-    return (*__ref) == 1;
-  }
-
-private:
-
-  DXXAPILOCAL void ref() const
-  {
-    ++ (*__ref);
-  }
-  DXXAPILOCAL void unref() const
-  {
-    -- (*__ref);
-
-    if ((*__ref) < 0)
-    {
-      debug_log("%p: refcount dropped below zero!", __ref);
+    RefCnt() {
+        __ref = new int;
+        (*__ref) = 1;
     }
 
-    if (noref())
-    {
-      delete __ref;
+    RefCnt(const RefCnt &rc) {
+        __ref = rc.__ref;
+        ref();
     }
-  }
 
-private:
+    virtual ~RefCnt() {
+        unref();
+    }
 
-  int *__ref;
+    RefCnt &operator =(const RefCnt &ref) {
+        ref.ref();
+        unref();
+        __ref = ref.__ref;
+        return *this;
+    }
+
+    bool noref() const {
+        return (*__ref) == 0;
+    }
+
+    bool one() const {
+        return (*__ref) == 1;
+    }
+
+ private:
+
+    DXXAPILOCAL
+    void ref() const {
+        ++(*__ref);
+    }
+    DXXAPILOCAL
+    void unref() const {
+        --(*__ref);
+
+        if ((*__ref) < 0) {
+            debug_log("%p: refcount dropped below zero!", __ref);
+        }
+
+        if (noref()) {
+            delete __ref;
+        }
+    }
+
+ private:
+
+    int *__ref;
 };
 
 /*
  *   Reference counting pointers (emulate boost::shared_ptr)
  */
 
-template <class T>
+template<class T>
 class RefPtrI		// RefPtr to incomplete type
 {
-public:
+ public:
 
-  RefPtrI(T *ptr = 0);
+    RefPtrI(T *ptr = 0);
 
-  ~RefPtrI();
+    ~RefPtrI();
 
-  RefPtrI &operator = (const RefPtrI &ref)
-  {
-    if (this != &ref)
-    {
-      if (__cnt.one()) delete __ptr;
+    RefPtrI &operator =(const RefPtrI &ref) {
+        if (this != &ref) {
+            if (__cnt.one())
+                delete __ptr;
 
-      __ptr = ref.__ptr;
-      __cnt = ref.__cnt;
+            __ptr = ref.__ptr;
+            __cnt = ref.__cnt;
+        }
+        return *this;
     }
-    return *this;
-  }
 
-  T &operator *() const
-  {
-    return *__ptr;
-  }
+    T &operator *() const {
+        return *__ptr;
+    }
 
-  T *operator ->() const
-  {
-    if (__cnt.noref()) return 0;
+    T *operator ->() const {
+        if (__cnt.noref())
+            return 0;
 
-    return __ptr;
-  }
+        return __ptr;
+    }
 
-  T *get() const
-  {
-    if (__cnt.noref()) return 0;
+    T *get() const {
+        if (__cnt.noref())
+            return 0;
 
-    return __ptr;
-  }
+        return __ptr;
+    }
 
-private:
+ private:
 
-  T *__ptr;
-  RefCnt __cnt;
+    T *__ptr;
+    RefCnt __cnt;
 };
 
-template <class T>
-class RefPtr
-{
-public:
+template<class T>
+class RefPtr {
+ public:
 
-  RefPtr(T *ptr = 0)
-    : __ptr(ptr)
-  {}
-
-  ~RefPtr()
-  {
-    if (__cnt.one()) delete __ptr;
-  }
-
-  RefPtr &operator = (const RefPtr &ref)
-  {
-    if (this != &ref)
-    {
-      if (__cnt.one()) delete __ptr;
-
-      __ptr = ref.__ptr;
-      __cnt = ref.__cnt;
+    RefPtr(T *ptr = 0)
+        : __ptr(ptr) {
     }
-    return *this;
-  }
 
-  T &operator *() const
-  {
-    return *__ptr;
-  }
+    ~RefPtr() {
+        if (__cnt.one())
+            delete __ptr;
+    }
 
-  T *operator ->() const
-  {
-    if (__cnt.noref()) return 0;
+    RefPtr &operator =(const RefPtr &ref) {
+        if (this != &ref) {
+            if (__cnt.one())
+                delete __ptr;
 
-    return __ptr;
-  }
+            __ptr = ref.__ptr;
+            __cnt = ref.__cnt;
+        }
+        return *this;
+    }
 
-  T *get() const
-  {
-    if (__cnt.noref()) return 0;
+    T &operator *() const {
+        return *__ptr;
+    }
 
-    return __ptr;
-  }
+    T *operator ->() const {
+        if (__cnt.noref())
+            return 0;
 
-private:
+        return __ptr;
+    }
 
-  T *__ptr;
-  RefCnt __cnt;
+    T *get() const {
+        if (__cnt.noref())
+            return 0;
+
+        return __ptr;
+    }
+
+ private:
+
+    T *__ptr;
+    RefCnt __cnt;
 };
 
 /*
  *   Typed callback template
  */
 
-template <class R, class P>
-class Callback_Base
-{
-public:
+template<class R, class P>
+class Callback_Base {
+ public:
 
-  virtual R call(P param) const = 0;
+    virtual R call(P param) const = 0;
 
-  virtual ~Callback_Base()
-  {}
+    virtual ~Callback_Base() {
+    }
 };
 
-template <class R, class P>
-class Slot
-{
-public:
+template<class R, class P>
+class Slot {
+ public:
 
-  Slot &operator = (Callback_Base<R, P>* s)
-  {
-    _cb = s;
+    Slot &operator =(Callback_Base<R, P>* s) {
+        _cb = s;
 
-    return *this;
-  }
-
-  R operator()(P param) const
-  {
-    if (!empty())
-    {
-      return _cb->call(param);
+        return *this;
     }
 
-    // TODO: think about return type in this case
-    // this assert should help me to find the use case where it's needed...
-    //assert (false);
-  }
+    R operator()(P param) const {
+        if (!empty()) {
+            return _cb->call(param);
+        }
 
-  R call(P param) const
-  {
-    if (!empty())
-    {
-      return _cb->call(param);
+        // TODO: think about return type in this case
+        // this assert should help me to find the use case where it's needed...
+        //assert (false);
     }
 
-    // TODO: think about return type in this case
-    // this assert should help me to find the use case where it's needed...
-    //assert (false);
-  }
+    R call(P param) const {
+        if (!empty()) {
+            return _cb->call(param);
+        }
 
-  bool empty() const
-  {
-    return _cb.get() == 0;
-  }
+        // TODO: think about return type in this case
+        // this assert should help me to find the use case where it's needed...
+        //assert (false);
+    }
 
-private:
+    bool empty() const {
+        return _cb.get() == 0;
+    }
 
-  RefPtr< Callback_Base<R, P> > _cb;
+ private:
+
+    RefPtr<Callback_Base<R, P> > _cb;
 };
 
-template <class C, class R, class P>
-class Callback : public Callback_Base<R, P>
-{
-public:
+template<class C, class R, class P>
+class Callback : public Callback_Base<R, P> {
+ public:
 
-  typedef R(C::*M)(P);
+    typedef R (C::*M)(P);
 
-  Callback(C *c, M m)
-    : _c(c), _m(m)
-  {}
+    Callback(C *c, M m)
+        : _c(c),
+          _m(m) {
+    }
 
-  R call(P param) const
-  {
-    /*if (_c)*/ return (_c->*_m)(param);
-  }
+    R call(P param) const {
+        /*if (_c)*/return (_c->*_m)(param);
+    }
 
-private:
+ private:
 
-  C *_c;
-  M _m;
+    C *_c;
+    M _m;
 };
 
 /// create std::string from any number
-template <typename T>
-std::string toString(const T &thing, int w = 0, int p = 0)
-{
-  std::ostringstream os;
-  os << std::setw(w) << std::setprecision(p) << thing;
-  return os.str();
+template<typename T>
+std::string toString(const T &thing, int w = 0, int p = 0) {
+    std::ostringstream os;
+    os << std::setw(w) << std::setprecision(p) << thing;
+    return os.str();
 }
 
 } /* namespace DBus */

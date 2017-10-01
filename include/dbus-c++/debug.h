@@ -21,14 +21,12 @@
  *
  */
 
-
 #ifndef __DBUSXX_DEBUG_H
 #define __DBUSXX_DEBUG_H
 
 #include "api.h"
 
-namespace DBus
-{
+namespace DBus {
 
 typedef void (*LogFunction)(const char *format, ...);
 

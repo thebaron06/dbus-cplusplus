@@ -21,7 +21,6 @@
  *
  */
 
-
 #ifndef __DBUSXX_MESSAGE_P_H
 #define __DBUSXX_MESSAGE_P_H
 
@@ -34,18 +33,18 @@
 
 #include <dbus/dbus.h>
 
-namespace DBus
-{
+namespace DBus {
 
-struct DXXAPILOCAL Message::Private
-{
-  DBusMessage *msg;
+struct DXXAPILOCAL Message::Private {
+    DBusMessage *msg;
 
-  Private() : msg(0)
-  {}
+    Private()
+        : msg(0) {
+    }
 
-  Private(DBusMessage *m) : msg(m)
-  {}
+    Private(DBusMessage *m)
+        : msg(m) {
+    }
 };
 
 } /* namespace DBus */

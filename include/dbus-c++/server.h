@@ -21,7 +21,6 @@
  *
  */
 
-
 #ifndef __DBUSXX_SERVER_H
 #define __DBUSXX_SERVER_H
 
@@ -33,41 +32,39 @@
 #include "util.h"
 #include "dispatcher.h"
 
-namespace DBus
-{
+namespace DBus {
 
 class Server;
 
 typedef std::list<Server> ServerList;
 
-class DXXAPI Server
-{
-public:
+class DXXAPI Server {
+ public:
 
-  Server(const char *address);
+    Server(const char *address);
 
-  Dispatcher *setup(Dispatcher *);
+    Dispatcher *setup(Dispatcher *);
 
-  virtual ~Server();
+    virtual ~Server();
 
-  bool listening() const;
+    bool listening() const;
 
-  bool operator == (const Server &) const;
+    bool operator ==(const Server &) const;
 
-  void disconnect();
+    void disconnect();
 
-  struct Private;
+    struct Private;
 
-protected:
+ protected:
 
-  Server(const Server &s)
-  {}
+    Server(const Server &s) {
+    }
 
-  virtual void on_new_connection(Connection &c) = 0;
+    virtual void on_new_connection(Connection &c) = 0;
 
-private:
+ private:
 
-  RefPtrI<Private> _pvt;
+    RefPtrI<Private> _pvt;
 };
 
 } /* namespace DBus */

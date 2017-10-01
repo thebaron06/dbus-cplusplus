@@ -21,7 +21,6 @@
  *
  */
 
-
 #ifndef __DBUSXX_SERVER_P_H
 #define __DBUSXX_SERVER_P_H
 
@@ -35,22 +34,20 @@
 
 #include <dbus/dbus.h>
 
-namespace DBus
-{
+namespace DBus {
 
-struct DXXAPILOCAL Server::Private
-{
-  DBusServer *server;
+struct DXXAPILOCAL Server::Private {
+    DBusServer *server;
 
-  Dispatcher *dispatcher;
+    Dispatcher *dispatcher;
 
-  ConnectionList connections;
+    ConnectionList connections;
 
-  Private(DBusServer *);
+    Private(DBusServer *);
 
-  ~Private();
+    ~Private();
 
-  static void on_new_conn_cb(DBusServer *server, DBusConnection *conn, void *data);
+    static void on_new_conn_cb(DBusServer *server, DBusConnection *conn, void *data);
 };
 
 } /* namespace DBus */

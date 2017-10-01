@@ -21,7 +21,6 @@
  *
  */
 
-
 #ifndef __DBUSXX_DISPATCHER_P_H
 #define __DBUSXX_DISPATCHER_P_H
 
@@ -35,22 +34,20 @@
 
 #include "internalerror.h"
 
-namespace DBus
-{
+namespace DBus {
 
-struct DXXAPILOCAL Dispatcher::Private
-{
-  static dbus_bool_t on_add_watch(DBusWatch *watch, void *data);
+struct DXXAPILOCAL Dispatcher::Private {
+    static dbus_bool_t on_add_watch(DBusWatch *watch, void *data);
 
-  static void on_rem_watch(DBusWatch *watch, void *data);
+    static void on_rem_watch(DBusWatch *watch, void *data);
 
-  static void on_toggle_watch(DBusWatch *watch, void *data);
+    static void on_toggle_watch(DBusWatch *watch, void *data);
 
-  static dbus_bool_t on_add_timeout(DBusTimeout *timeout, void *data);
+    static dbus_bool_t on_add_timeout(DBusTimeout *timeout, void *data);
 
-  static void on_rem_timeout(DBusTimeout *timeout, void *data);
+    static void on_rem_timeout(DBusTimeout *timeout, void *data);
 
-  static void on_toggle_timeout(DBusTimeout *timeout, void *data);
+    static void on_toggle_timeout(DBusTimeout *timeout, void *data);
 };
 
 } /* namespace DBus */

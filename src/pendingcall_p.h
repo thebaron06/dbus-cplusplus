@@ -21,7 +21,6 @@
  *
  */
 
-
 #ifndef __DBUSXX_PENDING_CALL_P_H
 #define __DBUSXX_PENDING_CALL_P_H
 
@@ -34,20 +33,18 @@
 
 #include <dbus/dbus.h>
 
-namespace DBus
-{
+namespace DBus {
 
-struct DXXAPILOCAL PendingCall::Private
-{
-  DBusPendingCall *call;
-  int dataslot;
-  Slot<void, PendingCall &> slot;
+struct DXXAPILOCAL PendingCall::Private {
+    DBusPendingCall *call;
+    int dataslot;
+    Slot<void, PendingCall &> slot;
 
-  Private(DBusPendingCall *);
+    Private(DBusPendingCall *);
 
-  ~Private();
+    ~Private();
 
-  static void notify_stub(DBusPendingCall *dpc, void *data);
+    static void notify_stub(DBusPendingCall *dpc, void *data);
 };
 
 } /* namespace DBus */
