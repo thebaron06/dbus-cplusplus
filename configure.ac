@@ -1,7 +1,7 @@
 # Autojunk script for libdbus-c++
 
 AC_PREREQ(2.59)
-AC_INIT([libdbus-c++], 0.9.1pw)
+AC_INIT([libdbus-c++], 0.9.2)
 AC_CONFIG_SRCDIR([src/error.cpp])
 AM_CONFIG_HEADER([config.h])
 AC_CONFIG_MACRO_DIR([m4])
@@ -60,6 +60,7 @@ AC_SUBST(RT_LIBS)
 # Check for programs
 
 AC_LANG_CPLUSPLUS
+AX_CXX_COMPILE_STDCXX_11
 
 AC_PROG_CC
 AC_PROG_CXX
