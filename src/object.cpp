@@ -50,7 +50,7 @@ Object::~Object() {
 }
 
 void Object::set_timeout(int new_timeout) {
-    debug_log("%s: %d millies", __PRETTY_FUNCTION__, new_timeout);
+    LOG("%s: %d millies", __PRETTY_FUNCTION__, new_timeout);
     if (new_timeout < 0 && new_timeout != -1)
         throw ErrorInvalidArgs("Bad timeout, cannot set it");
     _default_timeout = new_timeout;
@@ -75,8 +75,8 @@ DBusHandlerResult ObjectAdaptor::Private::message_function_stub(DBusConnection *
     if (o) {
         Message msg(new Message::Private(dmsg));
 
-        debug_log("in object %s", o->path().c_str());
-        debug_log(" got message #%d from %s to %s", msg.serial(), msg.sender(), msg.destination());
+        LOG("in object %s", o->path().c_str());
+        LOG(" got message #%d from %s to %s", msg.serial(), msg.sender(), msg.destination());
 
         return o->handle_message(msg) ? DBUS_HANDLER_RESULT_HANDLED : DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
     } else {
@@ -145,7 +145,7 @@ ObjectAdaptor::~ObjectAdaptor() {
 }
 
 void ObjectAdaptor::register_obj() {
-    debug_log("registering local object %s", path().c_str());
+    LOG("registering local object %s", path().c_str());
 
     if (!dbus_connection_register_object_path(conn()._pvt->conn, path().c_str(), &_vtable, this)) {
         throw ErrorNoMemory("unable to register object path");
@@ -157,7 +157,7 @@ void ObjectAdaptor::register_obj() {
 void ObjectAdaptor::unregister_obj(bool) {
     _adaptor_table.erase(path());
 
-    debug_log("unregistering local object %s", path().c_str());
+    LOG("unregistering local object %s", path().c_str());
 
     dbus_connection_unregister_object_path(conn()._pvt->conn, path().c_str());
 }
@@ -180,7 +180,7 @@ bool ObjectAdaptor::handle_message(const Message &msg) {
             const char *interface = cmsg.interface();
             InterfaceAdaptor *ii = NULL;
 
-            debug_log(" invoking method %s.%s", interface, member);
+            LOG(" invoking method %s.%s", interface, member);
 
             if (interface)
                 ii = find_interface(interface);
@@ -260,7 +260,7 @@ ObjectProxy::~ObjectProxy() {
 }
 
 void ObjectProxy::register_obj() {
-    debug_log("registering remote object %s", path().c_str());
+    LOG("registering remote object %s", path().c_str());
 
     _filtered = new Callback<ObjectProxy, bool, const Message &>(this, &ObjectProxy::handle_message);
 
@@ -275,7 +275,7 @@ void ObjectProxy::register_obj() {
 }
 
 void ObjectProxy::unregister_obj(bool throw_on_error) {
-    debug_log("unregistering remote object %s", path().c_str());
+    LOG("unregistering remote object %s", path().c_str());
 
     InterfaceProxyTable::const_iterator ii = _interfaces.begin();
     while (ii != _interfaces.end()) {
@@ -317,7 +317,7 @@ bool ObjectProxy::handle_message(const Message &msg) {
             if (objpath != path())
                 return false;
 
-            debug_log("filtered signal %s(in %s) from %s to object %s", member, interface, msg.sender(), objpath);
+            LOG("filtered signal %s(in %s) from %s to object %s", member, interface, msg.sender(), objpath);
 
             InterfaceProxy *ii = find_interface(interface);
             if (ii) {

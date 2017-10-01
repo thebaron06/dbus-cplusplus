@@ -32,6 +32,15 @@ typedef void (*LogFunction)(const char *format, ...);
 
 extern DXXAPI LogFunction debug_log;
 
+#ifndef NDEBUG
+// see https://gcc.gnu.org/onlinedocs/cpp/Variadic-Macros.html
+#define LOG(_LOG_MSG_FMT, ...) do{ \
+        debug_log(_LOG_MSG_FMT, ##__VA_ARGS__); \
+    } while(0)
+#else
+#define LOG(...)
+#endif
+
 } /* namespace DBus */
 
 #endif

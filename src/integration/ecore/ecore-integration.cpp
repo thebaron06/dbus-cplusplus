@@ -45,7 +45,7 @@ Ecore::BusTimeout::~BusTimeout() {
 }
 
 void Ecore::BusTimeout::toggle() {
-    debug_log("ecore: timeout %p toggled (%s)", this, Timeout::enabled() ? "on" : "off");
+    LOG("ecore: timeout %p toggled (%s)", this, Timeout::enabled() ? "on" : "off");
 
     if (Timeout::enabled()) {
         _enable();
@@ -57,7 +57,7 @@ void Ecore::BusTimeout::toggle() {
 Eina_Bool Ecore::BusTimeout::timeout_handler(void *data) {
     Ecore::BusTimeout *t = reinterpret_cast<Ecore::BusTimeout *>(data);
 
-    debug_log("Ecore::BusTimeout::timeout_handler( void *data )");
+    LOG("Ecore::BusTimeout::timeout_handler( void *data )");
 
     t->handle();
 
@@ -65,13 +65,13 @@ Eina_Bool Ecore::BusTimeout::timeout_handler(void *data) {
 }
 
 void Ecore::BusTimeout::_enable() {
-    debug_log("Ecore::BusTimeout::_enable()");
+    LOG("Ecore::BusTimeout::_enable()");
 
     _etimer = ecore_timer_add(((double) Timeout::interval()) / 1000, timeout_handler, this);
 }
 
 void Ecore::BusTimeout::_disable() {
-    debug_log("Ecore::BusTimeout::_disable()");
+    LOG("Ecore::BusTimeout::_disable()");
 
     ecore_timer_del(_etimer);
 }
@@ -90,7 +90,7 @@ Ecore::BusWatch::~BusWatch() {
 }
 
 void Ecore::BusWatch::toggle() {
-    debug_log("ecore: watch %p toggled (%s)", this, Watch::enabled() ? "on" : "off");
+    LOG("ecore: watch %p toggled (%s)", this, Watch::enabled() ? "on" : "off");
 
     if (Watch::enabled())
         _enable();
@@ -101,7 +101,7 @@ void Ecore::BusWatch::toggle() {
 Eina_Bool Ecore::BusWatch::watch_dispatch(void *data, Ecore_Fd_Handler *fdh) {
     Ecore::BusWatch *w = reinterpret_cast<Ecore::BusWatch *>(data);
 
-    debug_log("Ecore::BusWatch watch_handler");
+    LOG("Ecore::BusWatch watch_handler");
 
     int flags = w->flags();
 
@@ -117,7 +117,7 @@ Eina_Bool Ecore::BusWatch::watch_dispatch(void *data, Ecore_Fd_Handler *fdh) {
 }
 
 void Ecore::BusWatch::_enable() {
-    debug_log("Ecore::BusWatch::_enable()");
+    LOG("Ecore::BusWatch::_enable()");
 
     fd_handler = ecore_main_fd_handler_add(descriptor(), (Ecore_Fd_Handler_Flags)(ECORE_FD_READ | ECORE_FD_WRITE),
                                            watch_dispatch, this,
@@ -146,13 +146,13 @@ Eina_Bool Ecore::BusDispatcher::check(void *data, Ecore_Fd_Handler *fdh) {
 Timeout *Ecore::BusDispatcher::add_timeout(Timeout::Internal *wi) {
     Timeout *t = new Ecore::BusTimeout(wi);
 
-    debug_log("ecore: added timeout %p (%s)", t, t->enabled() ? "on" : "off");
+    LOG("ecore: added timeout %p (%s)", t, t->enabled() ? "on" : "off");
 
     return t;
 }
 
 void Ecore::BusDispatcher::rem_timeout(Timeout *t) {
-    debug_log("ecore: removed timeout %p", t);
+    LOG("ecore: removed timeout %p", t);
 
     delete t;
 }
@@ -161,12 +161,12 @@ Watch *Ecore::BusDispatcher::add_watch(Watch::Internal *wi) {
     Ecore::BusWatch *w = new Ecore::BusWatch(wi);
     w->data(this);
 
-    debug_log("ecore: added watch %p (%s) fd=%d flags=%d", w, w->enabled() ? "on" : "off", w->descriptor(), w->flags());
+    LOG("ecore: added watch %p (%s) fd=%d flags=%d", w, w->enabled() ? "on" : "off", w->descriptor(), w->flags());
     return w;
 }
 
 void Ecore::BusDispatcher::rem_watch(Watch *w) {
-    debug_log("ecore: removed watch %p", w);
+    LOG("ecore: removed watch %p", w);
 
     delete w;
 }

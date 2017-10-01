@@ -47,7 +47,7 @@ InterfaceAdaptor *AdaptorBase::find_interface(const std::string &name) {
 
 InterfaceAdaptor::InterfaceAdaptor(const std::string &name)
     : Interface(name) {
-    debug_log("adding interface %s", name.c_str());
+    LOG("adding interface %s", name.c_str());
 
     _interfaces[name] = this;
 }
@@ -110,7 +110,7 @@ InterfaceProxy *ProxyBase::find_interface(const std::string &name) {
 
 InterfaceProxy::InterfaceProxy(const std::string &name)
     : Interface(name) {
-    debug_log("adding interface %s", name.c_str());
+    LOG("adding interface %s", name.c_str());
 
     _interfaces[name] = this;
 }

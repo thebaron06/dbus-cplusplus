@@ -208,7 +208,7 @@ void Dispatcher::dispatch_pending(Connection::PrivatePList &pending_queue) {
             if ((*i)->do_dispatch())
                 pending_queue.erase(i);
             else
-                debug_log("dispatch_pending_private: do_dispatch error");
+                LOG("dispatch_pending_private: do_dispatch error");
 
             i = j;
         }

@@ -50,7 +50,7 @@ BusTimeout::BusTimeout(Timeout::Internal *ti, BusDispatcher *bd)
 }
 
 void BusTimeout::toggle() {
-    debug_log("timeout %p toggled (%s)", this, Timeout::enabled() ? "on" : "off");
+    LOG("timeout %p toggled (%s)", this, Timeout::enabled() ? "on" : "off");
 
     DefaultTimeout::enabled(Timeout::enabled());
 }
@@ -70,7 +70,7 @@ BusWatch::BusWatch(Watch::Internal *wi, BusDispatcher *bd)
 }
 
 void BusWatch::toggle() {
-    debug_log("watch %p toggled (%s)", this, Watch::enabled() ? "on" : "off");
+    LOG("watch %p toggled (%s)", this, Watch::enabled() ? "on" : "off");
 
     DefaultWatch::enabled(Watch::enabled());
 }
@@ -93,7 +93,7 @@ BusDispatcher::~BusDispatcher() {
 }
 
 void BusDispatcher::enter() {
-    debug_log("entering dispatcher %p", this);
+    LOG("entering dispatcher %p", this);
 
     _running = true;
 
@@ -112,7 +112,7 @@ void BusDispatcher::enter() {
         }
     }
 
-    debug_log("leaving dispatcher %p", this);
+    LOG("leaving dispatcher %p", this);
 }
 
 void BusDispatcher::leave() {
@@ -146,14 +146,14 @@ Timeout *BusDispatcher::add_timeout(Timeout::Internal *ti) {
     bt->expired = new Callback<BusDispatcher, void, DefaultTimeout &>(this, &BusDispatcher::timeout_expired);
     bt->data(bt);
 
-    debug_log("added timeout %p (%s) (%d millies)", bt, ((Timeout *) bt)->enabled() ? "on" : "off",
+    LOG("added timeout %p (%s) (%d millies)", bt, ((Timeout *) bt)->enabled() ? "on" : "off",
               ((Timeout *) bt)->interval());
 
     return bt;
 }
 
 void BusDispatcher::rem_timeout(Timeout *t) {
-    debug_log("removed timeout %p", t);
+    LOG("removed timeout %p", t);
 
     delete t;
 }
@@ -164,20 +164,20 @@ Watch *BusDispatcher::add_watch(Watch::Internal *wi) {
     bw->ready = new Callback<BusDispatcher, void, DefaultWatch &>(this, &BusDispatcher::watch_ready);
     bw->data(bw);
 
-    debug_log("added watch %p (%s) fd=%d flags=%d", bw, ((Watch *) bw)->enabled() ? "on" : "off",
+    LOG("added watch %p (%s) fd=%d flags=%d", bw, ((Watch *) bw)->enabled() ? "on" : "off",
               ((Watch *) bw)->descriptor(), ((Watch *) bw)->flags());
 
     return bw;
 }
 
 void BusDispatcher::rem_watch(Watch *w) {
-    debug_log("removed watch %p", w);
+    LOG("removed watch %p", w);
 
     delete w;
 }
 
 void BusDispatcher::timeout_expired(DefaultTimeout &et) {
-    debug_log("timeout %p expired", &et);
+    LOG("timeout %p expired", &et);
 
     BusTimeout *timeout = reinterpret_cast<BusTimeout *>(et.data());
 
@@ -187,7 +187,7 @@ void BusDispatcher::timeout_expired(DefaultTimeout &et) {
 void BusDispatcher::watch_ready(DefaultWatch &ew) {
     BusWatch *watch = reinterpret_cast<BusWatch *>(ew.data());
 
-    debug_log("watch %p ready, flags=%d state=%d", watch, ((Watch *) watch)->flags(), watch->state());
+    LOG("watch %p ready, flags=%d state=%d", watch, ((Watch *) watch)->flags(), watch->state());
 
     int flags = 0;
 

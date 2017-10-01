@@ -81,7 +81,7 @@ class DXXAPI RefCnt {
         --(*__ref);
 
         if ((*__ref) < 0) {
-            debug_log("%p: refcount dropped below zero!", __ref);
+            LOG("%p: refcount dropped below zero!", __ref);
         }
 
         if (noref()) {

@@ -51,4 +51,3 @@ static void _debug_log_default(const char *format, ...) {
 }
 
 DBus::LogFunction DBus::debug_log = _debug_log_default;
-

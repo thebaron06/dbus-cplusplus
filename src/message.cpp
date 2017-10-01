@@ -280,7 +280,7 @@ static bool is_basic_type(int typecode) {
 void MessageIter::copy_data(MessageIter &to) {
     for (MessageIter &from = *this; !from.at_end(); ++from) {
         if (is_basic_type(from.type())) {
-            debug_log("copying basic type: %c", from.type());
+            LOG("copying basic type: %c", from.type());
 
             unsigned char value[8];
             from.get_basic(from.type(), &value);
@@ -289,7 +289,7 @@ void MessageIter::copy_data(MessageIter &to) {
             MessageIter from_container = from.recurse();
             char *sig = from_container.signature();
 
-            debug_log("copying compound type: %c[%s]", from.type(), sig);
+            LOG("copying compound type: %c[%s]", from.type(), sig);
 
             MessageIter to_container(to.msg());
             dbus_bool_t ret = dbus_message_iter_open_container(

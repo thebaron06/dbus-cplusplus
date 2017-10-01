@@ -43,7 +43,7 @@ IntrospectableAdaptor::IntrospectableAdaptor()
 }
 
 Message IntrospectableAdaptor::Introspect(const CallMessage &call) {
-    debug_log("requested introspection data");
+    LOG("requested introspection data");
 
     std::ostringstream xml;
 
@@ -56,7 +56,7 @@ Message IntrospectableAdaptor::Introspect(const CallMessage &call) {
     InterfaceAdaptorTable::const_iterator iti;
 
     for (iti = _interfaces.begin(); iti != _interfaces.end(); ++iti) {
-        debug_log("introspecting interface %s", iti->first.c_str());
+        LOG("introspecting interface %s", iti->first.c_str());
 
         IntrospectedInterface * const intro = iti->second->introspect();
         if (intro) {

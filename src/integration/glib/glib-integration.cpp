@@ -44,7 +44,7 @@ Glib::BusTimeout::~BusTimeout() {
 }
 
 void Glib::BusTimeout::toggle() {
-    debug_log("glib: timeout %p toggled (%s)", this, Timeout::enabled() ? "on" : "off");
+    LOG("glib: timeout %p toggled (%s)", this, Timeout::enabled() ? "on" : "off");
 
     if (Timeout::enabled())
         _enable();
@@ -83,21 +83,21 @@ struct BusSource {
 };
 
 static gboolean watch_prepare(GSource *source, gint *timeout) {
-    debug_log("glib: watch_prepare");
+    LOG("glib: watch_prepare");
 
     *timeout = -1;
     return FALSE;
 }
 
 static gboolean watch_check(GSource *source) {
-    debug_log("glib: watch_check");
+    LOG("glib: watch_check");
 
     BusSource *io = (BusSource *) source;
     return io->poll.revents ? TRUE : FALSE;
 }
 
 static gboolean watch_dispatch(GSource *source, GSourceFunc callback, gpointer data) {
-    debug_log("glib: watch_dispatch");
+    LOG("glib: watch_dispatch");
 
     gboolean cb = callback(data);
     return cb;
@@ -120,7 +120,7 @@ Glib::BusWatch::~BusWatch() {
 }
 
 void Glib::BusWatch::toggle() {
-    debug_log("glib: watch %p toggled (%s)", this, Watch::enabled() ? "on" : "off");
+    LOG("glib: watch %p toggled (%s)", this, Watch::enabled() ? "on" : "off");
 
     if (Watch::enabled())
         _enable();
@@ -252,13 +252,13 @@ void Glib::BusDispatcher::attach(GMainContext *ctx) {
 Timeout *Glib::BusDispatcher::add_timeout(Timeout::Internal *wi) {
     Timeout *t = new Glib::BusTimeout(wi, _ctx, _priority);
 
-    debug_log("glib: added timeout %p (%s)", t, t->enabled() ? "on" : "off");
+    LOG("glib: added timeout %p (%s)", t, t->enabled() ? "on" : "off");
 
     return t;
 }
 
 void Glib::BusDispatcher::rem_timeout(Timeout *t) {
-    debug_log("glib: removed timeout %p", t);
+    LOG("glib: removed timeout %p", t);
 
     delete t;
 }
@@ -266,12 +266,12 @@ void Glib::BusDispatcher::rem_timeout(Timeout *t) {
 Watch *Glib::BusDispatcher::add_watch(Watch::Internal *wi) {
     Watch *w = new Glib::BusWatch(wi, _ctx, _priority);
 
-    debug_log("glib: added watch %p (%s) fd=%d flags=%d", w, w->enabled() ? "on" : "off", w->descriptor(), w->flags());
+    LOG("glib: added watch %p (%s) fd=%d flags=%d", w, w->enabled() ? "on" : "off", w->descriptor(), w->flags());
     return w;
 }
 
 void Glib::BusDispatcher::rem_watch(Watch *w) {
-    debug_log("glib: removed watch %p", w);
+    LOG("glib: removed watch %p", w);
 
     delete w;
 }
