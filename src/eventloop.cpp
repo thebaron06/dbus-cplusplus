@@ -178,12 +178,7 @@ void DefaultMainLoop::dispatch()
   if (_fdunlock)
   {
     fds[nfd].fd = _fdunlock[0];
-    fds[nfd].events = POLLIN | POLLOUT | POLLPRI ;
-    fds[nfd].revents = 0;
-
-    nfd++;
-    fds[nfd].fd = _fdunlock[1];
-    fds[nfd].events = POLLIN | POLLOUT | POLLPRI ;
+    fds[nfd].events = POLLIN;
     fds[nfd].revents = 0;
   }
 
